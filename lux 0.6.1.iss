@@ -154,55 +154,78 @@ end;
 
 function FindBlenderScriptDir: string;
 var
+	regRoot: array[0..15] of integer;
+	i, rootCount: integer;
 	sl: TStringList;
 	i: integer;
 begin
 	result:= '';
+
+	rootCount:= 0;
+	if IsWin64 then
+	begin
+		regRoot[rootCount]:= HKEY_LOCAL_MACHINE_64;
+		rootCount:= rootCount + 1;
+		regRoot[rootCount]:= HKEY_CURRENT_USER_64;
+		rootCount:= rootCount + 1;
+	end;
+	regRoot[rootCount]:= HKEY_LOCAL_MACHINE_32;
+	rootCount:= rootCount + 1;
+	regRoot[rootCount]:= HKEY_CURRENT_USER_32;
+	rootCount:= rootCount + 1;
+
 	// Set default folder if empty
-	if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\BlenderFoundation',
-			'Home_Dir', result) then
+	for i:= 0 to rootCount-1 do
 	begin
-		result:= AddBackslash(result) + '.blender\scripts';
-	end
-	else if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\Wow6432Node\BlenderFoundation',
-			'Home_Dir', result) then
-	begin
-		result:= AddBackslash(result) + '.blender\scripts';
-	end
-	else
-	begin
-		sl:= TStringList.Create;
-		try
-			sl.Add(AddBackslash(GetEnv('HOME')) + '.blender\scripts');
-			sl.Add(AddBackslash(ExpandConstant('{userdocs}')) + '.blender\scripts');
-			sl.Add(AddBackslash(ExpandConstant('{commondocs}')) + '.blender\scripts');
-			for i:= 0 to sl.Count-1 do
-			begin
-			if DirExists(sl[i]) then
-			begin
-				result:= sl[i];
-				break;
-			  end;
-			end;
-		finally
-			sl.free;
+		if RegQueryStringValue(regRoot[i], 'SOFTWARE\BlenderFoundation',
+				'Home_Dir', result) then
+		begin
+			result:= AddBackslash(result) + '.blender\scripts';
+			exit;
+		end
+	end;
+
+	// not in registry, try other env and places
+	sl:= TStringList.Create;
+	try
+		sl.Add(AddBackslash(GetEnv('HOME')) + '.blender\scripts');
+		sl.Add(AddBackslash(ExpandConstant('{userdocs}')) + '.blender\scripts');
+		sl.Add(AddBackslash(ExpandConstant('{commondocs}')) + '.blender\scripts');
+		for i:= 0 to sl.Count-1 do
+		begin
+		if DirExists(sl[i]) then
+		begin
+			result:= sl[i];
+			break;
+		  end;
 		end;
+	finally
+		sl.free;
 	end;
 end;
 
 function LocatePython: boolean;
 var
-	regRoot: array[0..3] of integer;
+	regRoot: array[0..15] of integer;
 	pythonRoot: array[0..0] of string;
-	i, j: integer;
+	i, j, rootCount: integer;
 	keys: TArrayOfString;
 begin
-	regRoot[0]:= HKEY_LOCAL_MACHINE_32;
-	regRoot[1]:= HKEY_LOCAL_MACHINE_64;
-	regRoot[2]:= HKEY_CURRENT_USER_32;
-	regRoot[3]:= HKEY_CURRENT_USER_64;
+	rootCount:= 0;
+	if IsWin64 then
+	begin
+		regRoot[rootCount]:= HKEY_LOCAL_MACHINE_64;
+		rootCount:= rootCount + 1;
+		regRoot[rootCount]:= HKEY_CURRENT_USER_64;
+		rootCount:= rootCount + 1;
+	end;
+	regRoot[rootCount]:= HKEY_LOCAL_MACHINE_32;
+	rootCount:= rootCount + 1;
+	regRoot[rootCount]:= HKEY_CURRENT_USER_32;
+	rootCount:= rootCount + 1;
+
 	pythonRoot[0]:= 'SOFTWARE';
-	for i:= 0 to 3 do
+	for i:= 0 to rootCount-1 do
 	begin
 		for j:= 0 to 0 do
 		begin
@@ -338,6 +361,8 @@ begin
 		result:= '';
 end;
 
+// firewall code from CHB
+// http://news.jrsoftware.org/news/innosetup/msg43799.html
 const
 	NET_FW_SCOPE_ALL = 0;
 	NET_FW_IP_VERSION_ANY = 2;
@@ -393,6 +418,7 @@ begin
 		//RemoveFirewallException(ExpandConstant('{app}') + '\luxconsole.exe');
 	end;
 end;
+
 
 
 
