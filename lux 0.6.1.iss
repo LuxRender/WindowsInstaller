@@ -54,7 +54,7 @@ Name: english; MessagesFile: compiler:Default.isl
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
-Name: firewallexception; Description: {cm:AddFirewallException}; GroupDescription: {cm:AdditionalTasks}; Components: main
+Name: firewallexception; Description: {cm:AddFirewallException}; GroupDescription: {cm:AdditionalTasks}; Components: main; MinVersion: 0,5.01.2600
 Name: addtopath; Description: {cm:AddToPath}; GroupDescription: {cm:AdditionalTasks}; Components: main
 Name: associatelxs; Description: {cm:AssociateLXS}; GroupDescription: {cm:AdditionalTasks}; Components: main; Flags: unchecked
 
