@@ -8,8 +8,8 @@
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
 ;#define MyAppArch "x86 SSE1"
-;#define MyAppArch "x86 SSE2"
-#define MyAppArch "x64"
+#define MyAppArch "x86 SSE2"
+;#define MyAppArch "x64"
 
 #define ExampleSceneDir "{commondocs}\LuxRender\Example Scene"
 #define ExampleSceneFile "LuxRender_test_scene.lxs"
@@ -192,22 +192,20 @@ end;
 
 function LocatePython: boolean;
 var
-	regRoot: array[0..1] of integer;
-	pythonRoot: array[0..1] of string;
+	regRoot: array[0..3] of integer;
+	pythonRoot: array[0..0] of string;
 	i, j: integer;
 	keys: TArrayOfString;
 begin
-	regRoot[0]:= HKEY_LOCAL_MACHINE;
-	regRoot[1]:= HKEY_CURRENT_USER;
+	regRoot[0]:= HKEY_LOCAL_MACHINE_32;
+	regRoot[1]:= HKEY_LOCAL_MACHINE_64;
+	regRoot[2]:= HKEY_CURRENT_USER_32;
+	regRoot[3]:= HKEY_CURRENT_USER_64;
 	pythonRoot[0]:= 'SOFTWARE';
-	pythonRoot[1]:= 'SOFTWARE\Wow6432Node';
-	for i:= 0 to 1 do
+	for i:= 0 to 3 do
 	begin
-		for j:= 0 to 1 do
+		for j:= 0 to 0 do
 		begin
-			if (j = 1) and (not Is64BitInstallMode) then
-				continue;
-
 			result:= RegGetSubkeyNames(regRoot[i], pythonRoot[j] + '\Python\PythonCore', keys);
 			result:= result and (GetArrayLength(keys) > 0);
 			if result then
@@ -392,10 +390,7 @@ procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
 	if (CurUninstallStep = usPostUninstall) then
 	begin
-		if IsTaskSelected('firewallexception') then
-		begin
-			RemoveFirewallException(ExpandConstant('{app}') + '\luxconsole.exe');
-		end;
+		//RemoveFirewallException(ExpandConstant('{app}') + '\luxconsole.exe');
 	end;
 end;
 
