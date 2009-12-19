@@ -105,7 +105,7 @@ BlenderPythonCaption=Python support
 BlenderPythonDesc=Please read the following important information before continuing.
 BlenderPythonSubCaption=LuxBlend requires Python functionality
 BlenderPythonMsg2=LuxBlend {\b requires} full Python functionality in Blender. Thus you need to ensure that Blender is set up with full Python functionality. This requires that the correct version of Python is installed separately. For example if you use Blender 2.49, you should install Python 2.6.x.\par%n\par%nFor more information on how to set up Blender with full Python functionality see http://wiki.blender.org/index.php/Doc:Manual/Introduction/Installing_Blender/Python \par%n\par%nFor information on how to download Python see http://www.python.org/download/ \par
-BlenderPythonMsg={\colortbl ;\red255\green0\blue0;}Setup could not locate Python. {\cf1 LuxBlend will not function without full Python functionality in Blender}. You should install the same Python version as Blender was compiled with in order to get full Python support. For example if you use Blender 2.49, you should install Python 2.6.x.\par%n\par%nFor more information on how to set up Blender with full Pyton functionality see http://wiki.blender.org/index.php/Doc:Manual/Introduction/Installing_Blender/Python \par%n\par%nFor information on how to download Python see http://www.python.org/download/ \par
+BlenderPythonMsg={\colortbl ;\red255\green0\blue0;}Setup could not locate Python. {\cf1 LuxBlend will not function without full Python support in Blender}. You should install the same Python version as Blender was compiled with in order to get full Python support. For example if you use Blender 2.49, you should install Python 2.6.x.\par%n\par%nFor more information on how to set up Blender with full Pyton functionality see http://wiki.blender.org/index.php/Doc:Manual/Introduction/Installing_Blender/Python \par%n\par%nFor information on how to download Python see http://www.python.org/download/ \par
 LuxBlendLocation=LuxBlend location:
 AdditionalTasks=Additional options:
 AddToPath=Add install directory to system PATH. This makes it easier to use luxconsole and luxmerger.
@@ -116,6 +116,7 @@ ExampleLocation=Example scene location:
 StartLuxRenderSlave=Start LuxRender Slave
 AddFirewallException=Add Firewall exception for LuxRender slave
 LuxConsole={#MyAppName} Slave
+VerifyLuxBlendLocation=It would appear that the selected directory is not a Blender script directory.%n%nAre you sure you want to install LuxBlend into the following directory?%n%n%s%n
 
 [INI]
 Filename: {app}\{#MyAppName}.url; Section: InternetShortcut; Key: URL; String: {#MyAppURL}
@@ -156,6 +157,7 @@ var
 	sl: TStringList;
 	i: integer;
 begin
+	result:= '';
 	// Set default folder if empty
 	if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\BlenderFoundation',
 			'Home_Dir', result) then
@@ -215,6 +217,21 @@ begin
 	result:= (GetEnv('PYTHONPATH') <> '') and (DirExists(GetEnv('PYTHONPATH')));
 end;
 
+function SanityCheckBlenderScriptDir(ScriptDir: string): boolean;
+var
+	FindRec: TFindRec;
+begin
+	result:= False;
+	if not DirExists(RemoveBackslashUnlessRoot(ScriptDir)) then
+		exit;
+	if not DirExists(ScriptDir + 'bpydata') then
+		exit;
+	if not FindFirst(ScriptDir + '*.py', FindRec) then
+		exit;
+	FindClose(FindRec);
+	result:= True;
+end;
+
 procedure InitializeWizard;
 begin
 
@@ -255,10 +272,23 @@ end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
+	Result := False;
+
 	// Set default folder if empty
 	if BlenderScriptDirPage.Values[0] = '' then
 	begin
 		BlenderScriptDirPage.Values[0]:= FindBlenderScriptDir;
+	end;
+
+	if CurPageID = BlenderScriptDirPage.ID then
+	begin
+		if not SanityCheckBlenderScriptDir(AddBackslash(BlenderScriptDirPage.Values[0])) then
+		begin
+			// if sanity check fails, ask user to verify directory
+			if MsgBox(Format(CustomMessage('VerifyLuxBlendLocation'), [BlenderScriptDirPage.Values[0]]),
+					mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDNO then
+				exit;
+		end;
 	end;
 	Result := True;
 end;
@@ -276,13 +306,14 @@ begin
 	begin
 		S:= S + CustomMessage('LuxBlendLocation') + NewLine;
 		S:= S + Space + BlenderScriptDirPage.Values[0] + NewLine;
+		S:= S + NewLine;
 	end;
 
 	if IsComponentSelected('examplescene') then
 	begin
-		S:= S + NewLine + NewLine;
 		S:= S + CustomMessage('ExampleLocation') + NewLine;
 		S:= S + Space + ExpandConstant('{#ExampleSceneDir}') + NewLine;
+		S:= S + NewLine;
 	end;
 
 	Result:= S;
@@ -302,9 +333,9 @@ begin
 
 //	result:= ExpandConstant('{#ExampleSceneDir}\{#ExampleSceneFile}');
 	result:= ExpandConstant('{#ExampleSceneDir}');
-	if FileExists(result) then
-		result:= AddQuotes(result)
-		//result:= result
+	if DirExists(result) then
+//		result:= AddQuotes(result)
+		result:= result
 	else
 		result:= '';
 end;
@@ -341,7 +372,7 @@ begin
 	try
 		FirewallManager := CreateOleObject('HNetCfg.FwMgr');
 		FirewallProfile := FirewallManager.LocalPolicy.CurrentProfile;
-		FireWallProfile.AuthorizedApplications.Remove(FileName);
+		FirewallProfile.AuthorizedApplications.Remove(FileName);
 	except
 	end;
 end;
@@ -367,6 +398,8 @@ begin
 		end;
 	end;
 end;
+
+
 
 
 
