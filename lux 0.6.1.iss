@@ -8,11 +8,16 @@
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
 ;#define MyAppArch "x86 SSE1"
-#define MyAppArch "x86 SSE2"
-;#define MyAppArch "x64"
+;#define MyAppArch "x86 SSE2"
+#define MyAppArch "x64"
+
+#define MyAppRegRoot "SOFTWARE\LuxRender"
 
 #define ExampleSceneDir "{commondocs}\LuxRender\Example Scene"
 #define ExampleSceneFile "LuxRender_test_scene.lxs"
+
+#define RegValInstallDir "InstallDir"
+#define RegValFirewallException "FirewallException"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -96,6 +101,8 @@ Root: HKCR; SubKey: LuxRender.SceneFile\Shell; ValueType: string; ValueData: Ope
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell\Open\Command; ValueType: string; ValueData: """{app}\luxrender.exe"" ""%1"""; Flags: uninsdeletevalue; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell\Edit\Command; ValueType: expandsz; ValueData: "%SystemRoot%\system32\NOTEPAD.EXE ""%1"""; Flags: uninsdeletevalue; Tasks: associatelxs
 Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\luxrender.exe,0; Flags: uninsdeletevalue; Tasks: associatelxs
+Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: string; ValueName: {#RegValInstallDir}; ValueData: {app}; Flags: uninsdeletekeyifempty uninsdeletevalue
+Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: dword; ValueName: {#RegValFirewallException}; ValueData: 1; Tasks: firewallexception; Flags: uninsdeletekeyifempty uninsdeletevalue; Components: 
 
 [CustomMessages]
 BlenderScriptDirCaption=Select Blender script folder
@@ -116,7 +123,7 @@ ExampleLocation=Example scene location:
 StartLuxRenderSlave=Start LuxRender Slave
 AddFirewallException=Add Firewall exception for LuxRender slave
 LuxConsole={#MyAppName} Slave
-VerifyLuxBlendLocation=It would appear that the selected directory is not a Blender script directory.%n%nAre you sure you want to install LuxBlend into the following directory?%n%n%s%n
+VerifyLuxBlendLocation=Are you sure you want to install LuxBlend into the following directory?%n%n"%1"%n%nIt seems that the directory is not a regular Blender script directory.%n
 
 [INI]
 Filename: {app}\{#MyAppName}.url; Section: InternetShortcut; Key: URL; String: {#MyAppURL}
@@ -306,7 +313,7 @@ begin
 		if not SanityCheckBlenderScriptDir(AddBackslash(BlenderScriptDirPage.Values[0])) then
 		begin
 			// if sanity check fails, ask user to verify directory
-			if MsgBox(Format(CustomMessage('VerifyLuxBlendLocation'), [BlenderScriptDirPage.Values[0]]),
+			if MsgBox(FmtMessage(CustomMessage('VerifyLuxBlendLocation'), [BlenderScriptDirPage.Values[0]]),
 					mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDNO then
 				exit;
 		end;
@@ -411,16 +418,28 @@ begin
 	end;
 end;
 
+var
+  InstalledFirewallException: boolean;
+
+function InitializeUninstall(): Boolean;
+var
+  val: Cardinal;
+begin
+	result:= True;
+
+	InstalledFirewallException:= False;
+	if RegQueryDWordValue(HKEY_LOCAL_MACHINE, '{#MyAppRegRoot}', '{#RegValFirewallException}', val) then
+		InstalledFirewallException:= val <> 0;
+end;
+
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
 	if (CurUninstallStep = usPostUninstall) then
 	begin
-		//RemoveFirewallException(ExpandConstant('{app}') + '\luxconsole.exe');
+		if InstalledFirewallException then
+			RemoveFirewallException(ExpandConstant('{app}') + '\luxconsole.exe');
 	end;
 end;
-
-
-
 
 
 
