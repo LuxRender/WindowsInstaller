@@ -72,13 +72,14 @@ Source: Source\Files\{#MyAppArch}\Microsoft.VC90.CRT.manifest; DestDir: {app}; F
 Source: Source\Files\{#MyAppArch}\msvcm90.dll; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: Source\Files\{#MyAppArch}\msvcp90.dll; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: Source\Files\{#MyAppArch}\msvcr90.dll; DestDir: {app}; Flags: ignoreversion; Components: main
+Source: Source\Files\COPYING.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
 Source: Source\Files\run_slave.cmd; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: Source\Files\Example Scene\*; DestDir: {#ExampleSceneDir}; Flags: uninsneveruninstall onlyifdoesntexist; Components: examplescene
 Source: Source\Files\LuxBlend_0.1.py; DestDir: {code:GetBlenderScriptDir}; Flags: ignoreversion; Components: exporters\luxblend; DestName: LuxBlend_0.6.py
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
-Name: {group}\{cm:WebsiteName}; Filename: {app}\{#MyAppName}.url
+Name: {group}\{cm:WebsiteName}; Filename: {#MyAppURL}
 Name: {group}\{cm:StartLuxRenderSlave}; Filename: {app}\run_slave.cmd; IconFilename: {app}\luxconsole.exe
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon
 Name: {group}\{cm:ExampleScene}; Filename: {commondocs}\LuxRender\Example Scene; Comment: Folder containg the example scene; Flags: foldershortcut
@@ -124,12 +125,6 @@ StartLuxRenderSlave=Start LuxRender Slave
 AddFirewallException=Add Firewall exception for LuxRender slave
 LuxConsole={#MyAppName} Slave
 VerifyLuxBlendLocation=Are you sure you want to install LuxBlend into the following directory?%n%n"%1"%n%nIt seems that the directory is not a regular Blender script directory.%n
-
-[INI]
-Filename: {app}\{#MyAppName}.url; Section: InternetShortcut; Key: URL; String: {#MyAppURL}
-
-[UninstallDelete]
-Type: files; Name: {app}\LuxRender.url
 
 [Code]
 var
@@ -442,7 +437,5 @@ begin
 end;
 
 
-
-
-
-
+[InstallDelete]
+Name: {app}\LuxRender.url; Type: files
