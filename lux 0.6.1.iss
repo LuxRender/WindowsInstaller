@@ -39,6 +39,7 @@ Compression=lzma/ultra64
 SolidCompression=true
 MinVersion=0,5.0.2195
 ChangesEnvironment=true
+ChangesAssociations=true
 InternalCompressLevel=ultra64
 VersionInfoVersion=0.6.1.0
 VersionInfoDescription={#MyAppName} {#MyAppArch}
