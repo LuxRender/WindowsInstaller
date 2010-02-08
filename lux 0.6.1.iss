@@ -83,7 +83,7 @@ Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
 Name: {group}\{cm:WebsiteName}; Filename: {#MyAppURL}
 Name: {group}\{cm:StartLuxRenderSlave}; Filename: {app}\run_slave.cmd; IconFilename: {app}\luxconsole.exe
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon
-Name: {group}\{cm:ExampleScene}; Filename: {commondocs}\LuxRender\Example Scene; Comment: Folder containg the example scene; Flags: foldershortcut
+Name: {group}\{cm:ExampleScene}; Filename: {commondocs}\LuxRender\Example Scene; Comment: Folder containg the example scene; Flags: foldershortcut; Components: examplescene
 
 [Run]
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent; WorkingDir: {code:LuxRunParameters}
