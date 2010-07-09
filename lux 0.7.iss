@@ -3,7 +3,7 @@
 
 #define MyAppName "LuxRender"
 #define MyAppVersion "0.7"
-#define MyAppVerName "LuxRender 0.7 RC1"
+#define MyAppVerName "LuxRender 0.7"
 #define MyAppPublisher "LuxRender"
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
@@ -62,7 +62,10 @@ Name: english; MessagesFile: compiler:Default.isl
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
 Name: firewallexception; Description: {cm:AddFirewallException}; GroupDescription: {cm:AdditionalTasks}; Components: main; MinVersion: 0,5.01.2600
 Name: addtopath; Description: {cm:AddToPath}; GroupDescription: {cm:AdditionalTasks}; Components: main
-Name: associatelxs; Description: {cm:AssociateLXS}; GroupDescription: {cm:AdditionalTasks}; Components: main; Flags: unchecked
+Name: associatelxs; Description: {cm:AssociateLXS}; GroupDescription: {cm:AdditionalTasks}; Components: main; Flags: unchecked checkablealone
+Name: associatelxs\noicons; Description: {cm:AssociateLXSNoIcons}; GroupDescription: {cm:AdditionalTasks}; Flags: exclusive; Components: main
+Name: associatelxs\icons1; Description: {cm:AssociateLXSIcons1}; GroupDescription: {cm:AdditionalTasks}; Flags: exclusive unchecked; Components: main
+Name: associatelxs\icons2; Description: {cm:AssociateLXSIcons2}; GroupDescription: {cm:AdditionalTasks}; Flags: exclusive unchecked; Components: main
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
@@ -76,7 +79,9 @@ Source: Source\Files\{#MyAppArch}\msvcr90.dll; DestDir: {app}; Flags: ignorevers
 Source: Source\Files\COPYING.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
 Source: Source\Files\run_slave.cmd; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: Source\Files\Example Scene\*; DestDir: {#ExampleSceneDir}; Flags: uninsneveruninstall onlyifdoesntexist; Components: examplescene
-Source: Source\Files\LuxBlend_0.1.py; DestDir: {code:GetBlenderScriptDir}; Flags: ignoreversion; Components: exporters\luxblend; DestName: LuxBlend_0.7.py
+Source: Source\Files\LuxBlend_0.1.py; DestDir: {code:GetBlenderScriptDir}; Flags: ignoreversion; Components: exporters\luxblend; DestName: LuxBlend_{#MyAppVersion}.py
+Source: Source\Files\Icons\Scheme1\*; DestDir: {app}\Icons\Scheme1; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
+Source: Source\Files\Icons\Scheme2\*; DestDir: {app}\Icons\Scheme2; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
@@ -88,6 +93,9 @@ Name: {group}\{cm:ExampleScene}; Filename: {commondocs}\LuxRender\Example Scene;
 [InstallDelete]
 Name: {app}\LuxRender.url; Type: files
 Name: {code:GetBlenderScriptDir}\LuxBlend_0.6.py; Type: files; Components: exporters\luxblend; Tasks: ; Languages: 
+Name: {app}\Icons\Scheme1; Type: dirifempty
+Name: {app}\Icons\Scheme2; Type: dirifempty
+Name: {app}\Icons; Type: dirifempty
 
 [Run]
 Filename: {app}\{#MyAppExeName}; Description: {cm:LaunchProgram,{#MyAppName}}; Flags: nowait postinstall skipifsilent; WorkingDir: {code:LuxRunParameters}
@@ -106,7 +114,25 @@ Root: HKCR; SubKey: LuxRender.SceneFile; ValueType: string; ValueData: LuxRender
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell; ValueType: string; ValueData: Open; Flags: uninsdeletevalue; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell\Open\Command; ValueType: string; ValueData: """{app}\luxrender.exe"" ""%1"""; Flags: uninsdeletevalue; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell\Edit\Command; ValueType: expandsz; ValueData: "%SystemRoot%\system32\NOTEPAD.EXE ""%1"""; Flags: uninsdeletevalue; Tasks: associatelxs
-Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\luxrender.exe,0; Flags: uninsdeletevalue; Tasks: associatelxs
+Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\luxrender.exe,0; Flags: uninsdeletevalue; Tasks: associatelxs\noicons
+Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXS blue aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXS blue aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; SubKey: .lxm; ValueType: string; ValueData: LuxRender.MaterialFile; Flags: uninsdeletekey; Tasks: associatelxs
+Root: HKCR; SubKey: LuxRender.MaterialFile; ValueType: string; ValueData: LuxRender Material Definition File; Flags: uninsdeletekey; Tasks: associatelxs
+Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXM gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXM gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; SubKey: .lxo; ValueType: string; ValueData: LuxRender.GeometryFile; Flags: uninsdeletekey; Tasks: associatelxs
+Root: HKCR; SubKey: LuxRender.GeometryFile; ValueType: string; ValueData: LuxRender Geometry File; Flags: uninsdeletekey; Tasks: associatelxs
+Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXO gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXO gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; SubKey: .lxv; ValueType: string; ValueData: LuxRender.VolumeFile; Flags: uninsdeletekey; Tasks: associatelxs
+Root: HKCR; SubKey: LuxRender.VolumeFile; ValueType: string; ValueData: LuxRender Scene Volume Definition File; Flags: uninsdeletekey; Tasks: associatelxs
+Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXV gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXV gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; SubKey: .flm; ValueType: string; ValueData: LuxRender.ResumeFile; Flags: uninsdeletekey; Tasks: associatelxs
+Root: HKCR; SubKey: LuxRender.ResumeFile; ValueType: string; ValueData: LuxRender Resume FLM File; Flags: uninsdeletekey; Tasks: associatelxs
+Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender FLM green aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender FLM green aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: string; ValueName: {#RegValInstallDir}; ValueData: {app}; Flags: uninsdeletekeyifempty uninsdeletevalue
 Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: dword; ValueName: {#RegValFirewallException}; ValueData: 1; Tasks: firewallexception; Flags: uninsdeletekeyifempty uninsdeletevalue; Components: 
 
@@ -122,7 +148,10 @@ BlenderPythonMsg={\colortbl ;\red255\green0\blue0;}Setup could not locate Python
 LuxBlendLocation=LuxBlend location:
 AdditionalTasks=Additional options:
 AddToPath=Add install directory to system PATH. This makes it easier to use luxconsole and luxmerger.
-AssociateLXS=Associate LuxRender Scene Files (.lxs) with LuxRender.
+AssociateLXS=Associate LuxRender Scene Files (.lxs etc) with LuxRender.
+AssociateLXSNoIcons=Use default icon scheme.
+AssociateLXSIcons1=Use light gray icon scheme.
+AssociateLXSIcons2=Use dark gray icon scheme.
 WebsiteName={#MyAppName} Website
 ExampleScene=Example Scene
 ExampleLocation=Example scene location:
@@ -440,4 +469,3 @@ begin
 			RemoveFirewallException(ExpandConstant('{app}') + '\luxconsole.exe');
 	end;
 end;
-
