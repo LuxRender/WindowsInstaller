@@ -8,7 +8,7 @@
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
 ;#define MyAppArch "x86 SSE1"
-;#define MyAppArch "x86 SSE2"
+#define MyAppArch "x86 SSE2"
 #define MyAppArch "x64"
 
 #define MyAppRegRoot "SOFTWARE\LuxRender"
@@ -69,13 +69,7 @@ Name: associatelxs\icons2; Description: {cm:AssociateLXSIcons2}; GroupDescriptio
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: Source\Files\{#MyAppArch}\luxrender.exe; DestDir: {app}; Flags: ignoreversion; Components: main
-Source: Source\Files\{#MyAppArch}\luxconsole.exe; DestDir: {app}; Flags: ignoreversion; Components: main
-Source: Source\Files\{#MyAppArch}\luxmerger.exe; DestDir: {app}; Flags: ignoreversion; Components: main
-Source: Source\Files\{#MyAppArch}\Microsoft.VC90.CRT.manifest; DestDir: {app}; Flags: ignoreversion; Components: main
-Source: Source\Files\{#MyAppArch}\msvcm90.dll; DestDir: {app}; Flags: ignoreversion; Components: main
-Source: Source\Files\{#MyAppArch}\msvcp90.dll; DestDir: {app}; Flags: ignoreversion; Components: main
-Source: Source\Files\{#MyAppArch}\msvcr90.dll; DestDir: {app}; Flags: ignoreversion; Components: main
+Source: Source\Files\{#MyAppArch}\*; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: Source\Files\COPYING.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
 Source: Source\Files\run_slave.cmd; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: Source\Files\Example Scene\*; DestDir: {#ExampleSceneDir}; Flags: uninsneveruninstall onlyifdoesntexist; Components: examplescene
