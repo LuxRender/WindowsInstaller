@@ -2,14 +2,14 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LuxRender"
-#define MyAppVersion "0.7"
-#define MyAppVerName "LuxRender 0.7"
+#define MyAppVersion "0.7.1"
+#define MyAppVerName "LuxRender 0.7.1"
 #define MyAppPublisher "LuxRender"
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
 ;#define MyAppArch "x86 SSE1"
 #define MyAppArch "x86 SSE2"
-#define MyAppArch "x64"
+;#define MyAppArch "x64"
 
 #define MyAppRegRoot "SOFTWARE\LuxRender"
 
@@ -41,10 +41,10 @@ MinVersion=0,5.0.2195
 ChangesEnvironment=true
 ChangesAssociations=true
 InternalCompressLevel=ultra64
-VersionInfoVersion=0.7.0.1
+VersionInfoVersion=0.7.1.1
 VersionInfoDescription={#MyAppName} {#MyAppArch}
 VersionInfoProductName={#MyAppName}
-VersionInfoProductVersion=0.7.0.1
+VersionInfoProductVersion=0.7.1.1
 VersionInfoCompany={#MyAppPublisher}
 UninstallDisplayIcon={app}\luxrender.exe
 WizardImageFile=Source\wizardimage3.bmp
@@ -109,24 +109,34 @@ Root: HKCR; SubKey: LuxRender.SceneFile\Shell; ValueType: string; ValueData: Ope
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell\Open\Command; ValueType: string; ValueData: """{app}\luxrender.exe"" ""%1"""; Flags: uninsdeletevalue; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell\Edit\Command; ValueType: expandsz; ValueData: "%SystemRoot%\system32\NOTEPAD.EXE ""%1"""; Flags: uninsdeletevalue; Tasks: associatelxs
 Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\luxrender.exe,0; Flags: uninsdeletevalue; Tasks: associatelxs\noicons
-Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXS blue aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXS blue aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXS blue aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXS blue aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big S lxs green aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big S lxs green aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKCR; SubKey: .lxm; ValueType: string; ValueData: LuxRender.MaterialFile; Flags: uninsdeletekey; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.MaterialFile; ValueType: string; ValueData: LuxRender Material Definition File; Flags: uninsdeletekey; Tasks: associatelxs
-Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXM gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXM gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXM gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXM gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big M lxm blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big M lxm blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKCR; SubKey: .lxo; ValueType: string; ValueData: LuxRender.GeometryFile; Flags: uninsdeletekey; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.GeometryFile; ValueType: string; ValueData: LuxRender Geometry File; Flags: uninsdeletekey; Tasks: associatelxs
-Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXO gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXO gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXO gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXO gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big O lxo blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big O lxo blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKCR; SubKey: .lxv; ValueType: string; ValueData: LuxRender.VolumeFile; Flags: uninsdeletekey; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.VolumeFile; ValueType: string; ValueData: LuxRender Scene Volume Definition File; Flags: uninsdeletekey; Tasks: associatelxs
-Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXV gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXV gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXV gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXV gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big V lxv blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big V lxv blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKCR; SubKey: .flm; ValueType: string; ValueData: LuxRender.ResumeFile; Flags: uninsdeletekey; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.ResumeFile; ValueType: string; ValueData: LuxRender Resume FLM File; Flags: uninsdeletekey; Tasks: associatelxs
-Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender FLM green aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender FLM green aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender FLM green aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender FLM green aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big M flm blue aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big M flm blue aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: string; ValueName: {#RegValInstallDir}; ValueData: {app}; Flags: uninsdeletekeyifempty uninsdeletevalue
 Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: dword; ValueName: {#RegValFirewallException}; ValueData: 1; Tasks: firewallexception; Flags: uninsdeletekeyifempty uninsdeletevalue; Components: 
 
