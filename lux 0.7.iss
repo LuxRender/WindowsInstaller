@@ -8,8 +8,8 @@
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
 ;#define MyAppArch "x86 SSE1"
-#define MyAppArch "x86 SSE2"
-;#define MyAppArch "x64"
+;#define MyAppArch "x86 SSE2"
+#define MyAppArch "x64"
 
 #define MyAppRegRoot "SOFTWARE\LuxRender"
 
@@ -76,6 +76,8 @@ Source: Source\Files\Example Scene\*; DestDir: {#ExampleSceneDir}; Flags: uninsn
 Source: Source\Files\LuxBlend_0.1.py; DestDir: {code:GetBlenderScriptDir}; Flags: ignoreversion; Components: exporters\luxblend; DestName: LuxBlend_{#MyAppVersion}.py
 Source: Source\Files\Icons\Scheme1\*; DestDir: {app}\Icons\Scheme1; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
 Source: Source\Files\Icons\Scheme2\*; DestDir: {app}\Icons\Scheme2; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
+Source: Source\Files\Icons\Scheme3\*; DestDir: {app}\Icons\Scheme3; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
+Source: Source\Files\Icons\Scheme4\*; DestDir: {app}\Icons\Scheme4; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
 
 [Icons]
 Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
