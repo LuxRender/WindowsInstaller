@@ -39,6 +39,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 LicenseFile=Source\gpl-3.0.txt
+InfoAfterFile=Source\infoafter.txt
 OutputBaseFilename=LuxRender {#MyAppVersion} {#MyAppArch} {#MyAppCLArch} Setup
 Compression=lzma/ultra64
 SolidCompression=true
@@ -52,8 +53,8 @@ VersionInfoProductName={#MyAppName}
 VersionInfoProductVersion=0.8.0.1
 VersionInfoCompany={#MyAppPublisher}
 UninstallDisplayIcon={app}\luxrender.exe
-WizardImageFile=Source\wizardimage3.bmp
-WizardImageBackColor=clWhite
+WizardImageFile=Source\wizardimage4.bmp
+WizardImageBackColor=clBlack
 WizardSmallImageFile=Source\wizardimagesmall.bmp
 #if Copy(MyAppArch, 1, 3) == "x64"
 ArchitecturesAllowed=x64
@@ -76,6 +77,7 @@ Name: exporters; Description: Exporters; Types: full
 Name: exporters\luxblend; Description: LuxBlend - Exporter for Blender 2.49; Types: full
 Name: exporters\luxblend25; Description: LuxBlend25 - Exporter for Blender 2.5; Flags: checkablealone; Types: full
 Name: exporters\luxblend25\pylux; Description: PyLux - LuxRender integration for Blender 2.5 {#MyAppArch}; Types: full
+Name: exporters\luxmax; Description: LuxMax - Exporter for 3ds Max {#MyAppArch} 2010-2012; Types: full
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
@@ -98,6 +100,9 @@ Source: Source\Files\LuxBlend_0.1.py; DestDir: {code:GetBlenderScriptDir}; Flags
 Source: Source\Files\LuxBlend25\luxrender\*; DestDir: {code:GetBlender25ScriptDir}\addons\luxrender; Flags: ignoreversion recursesubdirs; Components: exporters\luxblend25;
 Source: Source\Files\LuxBlend25\presets\*; DestDir: {code:GetBlender25ScriptDir}\presets; Flags: ignoreversion recursesubdirs; Components: exporters\luxblend25;
 Source: Source\Files\{#MyLuxFileRoot}\PyLux\Python3\pylux.pyd; DestDir: {code:GetBlender25ScriptDir}\addons\luxrender; Flags: ignoreversion; Components: exporters\luxblend25\pylux;
+
+Source: Source\Files\LuxMax\Scripts\*; DestDir: {code:GetMaxRootDir}\Scripts; Flags: ignoreversion recursesubdirs; Components: exporters\luxmax;
+Source: Source\Files\LuxMax\Plugins\*; DestDir: {code:GetMaxRootDir}\Plugins; Flags: ignoreversion recursesubdirs; Components: exporters\luxmax;
 
 Source: Source\Files\Icons\Scheme1\*; DestDir: {app}\Icons\Scheme1; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
 Source: Source\Files\Icons\Scheme2\*; DestDir: {app}\Icons\Scheme2; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
@@ -165,9 +170,9 @@ Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: string; ValueName: {#RegValInsta
 Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: dword; ValueName: {#RegValFirewallException}; ValueData: 1; Tasks: firewallexception; Flags: uninsdeletekeyifempty uninsdeletevalue; Components: 
 
 [CustomMessages]
-BlenderScriptDirCaption=Select Blender 2.49 script folder
+BlenderScriptDirCaption=Select Blender 2.49 script directory
 BlenderScriptDirDesc=Where should LuxBlend be installed?
-BlenderScriptDirSubCaption=In order to function, LuxBlend needs to be installed in the Blender 2.49 scripts folder. This is typically the folder named "scripts" located inside the ".blender" folder you use.%n%nVerify or select the Blender 2.49 script folder in which Setup should install LuxBlend, then click Next.
+BlenderScriptDirSubCaption=In order to function, LuxBlend needs to be installed in the Blender 2.49 scripts directory. This is typically the directory named "scripts" located inside the ".blender" directory you use.%n%nVerify or select the Blender 2.49 script directory in which Setup should install LuxBlend, then click Next.
 BlenderPythonCaption=Python support
 BlenderPythonDesc=Please read the following important information before continuing.
 BlenderPythonSubCaption=LuxBlend requires Python functionality
@@ -176,11 +181,17 @@ BlenderPythonMsg={\colortbl ;\red255\green0\blue0;}Setup could not locate Python
 VerifyLuxBlendLocation=Are you sure you want to install LuxBlend into the following directory?%n%n"%1"%n%nIt seems that the directory is not a regular Blender 2.49 script directory.%n
 LuxBlendLocation=LuxBlend location:
 
-Blender25ScriptDirCaption=Select Blender 2.5 script folder
+Blender25ScriptDirCaption=Select Blender 2.5 script directory
 Blender25ScriptDirDesc=Where should LuxBlend25 be installed?
-Blender25ScriptDirSubCaption=In order to function, LuxBlend25 needs to be installed in the Blender 2.5 scripts folder.%n%nVerify or select the Blender 2.5 script folder in which Setup should install LuxBlend25, then click Next.
+Blender25ScriptDirSubCaption=In order to function, LuxBlend25 needs to be installed in the Blender 2.5 scripts directory.%n%nVerify or select the Blender 2.5 script directory in which Setup should install LuxBlend25, then click Next.
 VerifyLuxBlend25Location=Are you sure you want to install LuxBlend25 into the following directory?%n%n"%1"%n%nIt seems that the directory is not a regular Blender 2.5 script directory.%n
 LuxBlend25Location=LuxBlend25 location:
+
+MaxRootDirCaption=Select LuxMax installation directory
+MaxRootDirDesc=Where should LuxMax be installed?
+MaxRootDirSubCaption=In order to function, LuxMax needs to be installed in the 3ds Max scripts and plugin directories.%n%nVerify or select the 3ds Max root directory in which Setup should install LuxMax, then click Next.
+VerifyMaxLocation=Are you sure you want to install LuxMax into the following directory?%n%n"%1"%n%nIt seems that the directory is not a proper 3ds Max root directory.%n
+MaxLocation=LuxMax location:
 
 DefaultInstallation=Default installation
 AdditionalTasks=Additional options:
@@ -201,6 +212,7 @@ var
 	BlenderScriptDirPage: TInputDirWizardPage;
 	Blender25ScriptDirPage: TInputDirWizardPage;
 	PythonInfoPage: TOutputMsgMemoWizardPage;
+	MaxRootDirPage: TInputDirWizardPage;
 
 function NotAlreadyInPath: boolean;
 var
@@ -247,7 +259,7 @@ begin
 	regRoot[rootCount]:= HKEY_CURRENT_USER_32;
 	rootCount:= rootCount + 1;
 
-	// Set default folder if empty
+	// Set default directory if empty
 	for i:= 0 to rootCount-1 do
 	begin
 		if RegQueryStringValue(regRoot[i], 'SOFTWARE\BlenderFoundation',
@@ -313,7 +325,7 @@ begin
 	 	end;
 	end;
 
-	// Set default folder if empty
+	// Set default directory if empty
 	for i:= 0 to rootCount-1 do
 	begin
 		if RegQueryStringValue(regRoot[i], 'SOFTWARE\BlenderFoundation',
@@ -378,6 +390,42 @@ begin
 	result:= (GetEnv('PYTHONPATH') <> '') and (DirExists(GetEnv('PYTHONPATH')));
 end;
 
+function FindMaxRootDir: string;
+var
+	regRoot: array[0..15] of integer;
+	i, VerI, rootCount: integer;
+	sl: TStringList;
+begin
+	result:= '';
+
+	rootCount:= 0;
+	if IsWin64 then
+	begin
+		regRoot[rootCount]:= HKEY_LOCAL_MACHINE_64;
+		rootCount:= rootCount + 1;
+		regRoot[rootCount]:= HKEY_CURRENT_USER_64;
+		rootCount:= rootCount + 1;
+	end;
+	regRoot[rootCount]:= HKEY_LOCAL_MACHINE_32;
+	rootCount:= rootCount + 1;
+	regRoot[rootCount]:= HKEY_CURRENT_USER_32;
+	rootCount:= rootCount + 1;
+
+	// Set default directory if empty
+	for i:= 0 to rootCount-1 do
+	begin
+    for VerI := 14 downto 12 do
+    begin
+      if RegQueryStringValue(regRoot[i], 'Autodesk\3dsMax' + IntToStr(VerI) + '.0\MAX-1:409',
+        'Installdir', result) then
+      begin
+        result:= AddBackslash(result);
+        exit;
+      end;
+		end;
+	end;
+end;
+
 function SanityCheckBlenderScriptDir(ScriptDir: string): boolean;
 var
 	FindRec: TFindRec;
@@ -409,6 +457,20 @@ begin
 	result:= True;
 end;
 
+function SanityCheckMaxRootDir(ScriptDir: string): boolean;
+begin
+	result:= False;
+	if not DirExists(RemoveBackslashUnlessRoot(ScriptDir)) then
+		exit;
+	if not DirExists(ScriptDir + 'Scripts') then
+		exit;
+	if not DirExists(ScriptDir + 'Plugins') then
+		exit;
+	if not FileExists(ScriptDir + '3dsmax.exe') then
+	  exit;
+	result:= True;
+end;
+
 procedure InitializeWizard;
 begin
 
@@ -431,7 +493,15 @@ begin
 		CustomMessage('Blender25ScriptDirSubCaption'),
 		False, '');
 	Blender25ScriptDirPage.Add('');
-	Blender25ScriptDirPage.Values[0] := GetPreviousData('Blender25ScriptDir', '');	
+	Blender25ScriptDirPage.Values[0] := GetPreviousData('Blender25ScriptDir', '');
+	
+	
+	MaxRootDirPage := CreateInputDirPage(wpSelectComponents,
+		CustomMessage('MaxRootDirCaption'), CustomMessage('MaxRootDirDesc'),
+		CustomMessage('MaxRootDirSubCaption'),
+		False, '');
+	MaxRootDirPage.Add('');
+	MaxRootDirPage.Values[0] := GetPreviousData('MaxRootDir', ''); 	
 end;
 
 
@@ -452,13 +522,18 @@ begin
 	begin
 		result:= not IsComponentSelected('exporters\luxblend25');
 	end;
+	if (PageID = MaxRootDirPage.ID) then
+	begin
+		result:= not IsComponentSelected('exporters\luxmax');
+	end;
 end;
 
 procedure RegisterPreviousData(PreviousDataKey: Integer);
 begin
-	// Store the selected folder for further reinstall/upgrade
+	// Store the selected directory for further reinstall/upgrade
 	SetPreviousData(PreviousDataKey, 'BlenderScriptDir', BlenderScriptDirPage.Values[0]);
 	SetPreviousData(PreviousDataKey, 'Blender25ScriptDir', Blender25ScriptDirPage.Values[0]);
+	SetPreviousData(PreviousDataKey, 'MaxRootDir', MaxRootDirPage.Values[0]);
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -476,6 +551,11 @@ begin
   	if (Blender25ScriptDirPage.Values[0] = '') then
   	begin
   		Blender25ScriptDirPage.Values[0]:= FindBlender25ScriptDir;
+  	end;
+  	
+  	if (MaxRootDirPage.Values[0] = '') then
+  	begin
+  		MaxRootDirPage.Values[0]:= FindMaxRootDir;
   	end;
   end;
 
@@ -495,6 +575,16 @@ begin
 		begin
 			// if sanity check fails, ask user to verify directory
 			if MsgBox(FmtMessage(CustomMessage('VerifyLuxBlend25Location'), [Blender25ScriptDirPage.Values[0]]),
+					mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDNO then
+				exit;
+		end;
+	end;
+	if CurPageID = MaxRootDirPage.ID then
+	begin
+		if not SanityCheckMaxRootDir(AddBackslash(MaxRootDirPage.Values[0])) then
+		begin
+			// if sanity check fails, ask user to verify directory
+			if MsgBox(FmtMessage(CustomMessage('VerifyMaxLocation'), [MaxRootDirPage.Values[0]]),
 					mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDNO then
 				exit;
 		end;
@@ -525,6 +615,13 @@ begin
 		S:= S + NewLine;
 	end;
 
+	if (not ShouldSkipPage(MaxRootDirPage.ID)) then
+	begin
+		S:= S + CustomMessage('MaxLocation') + NewLine;
+		S:= S + Space + MaxRootDirPage.Values[0] + NewLine;
+		S:= S + NewLine;
+	end;
+
 	if IsComponentSelected('examplescene') then
 	begin
 		S:= S + CustomMessage('ExampleLocation') + NewLine;
@@ -545,6 +642,12 @@ function GetBlender25ScriptDir(Param: String): String;
 begin
 	{ Return the selected BlenderScriptDir }
 	Result := Blender25ScriptDirPage.Values[0];
+end;
+
+function GetMaxRootDir(Param: String): String;
+begin
+	{ Return the selected MaxRootDir }
+	Result := MaxRootDirPage.Values[0];
 end;
 
 function LuxRunParameters(Param: string): string;
@@ -634,3 +737,4 @@ begin
 			RemoveFirewallException(ExpandConstant('{app}') + '\luxconsole.exe');
 	end;
 end;
+
