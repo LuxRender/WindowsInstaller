@@ -8,8 +8,8 @@
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
 ;#define MyAppArch "x86 SSE1"
-;#define MyAppArch "x86 SSE2"
-#define MyAppArch "x64"
+#define MyAppArch "x86 SSE2"
+;#define MyAppArch "x64"
 ;#define MyAppCLArch "OpenCL"
 #define MyAppCLArch "NoOpenCL"
 
@@ -78,6 +78,7 @@ Name: exporters\luxblend; Description: LuxBlend - Exporter for Blender 2.49; Typ
 Name: exporters\luxblend25; Description: LuxBlend25 - Exporter for Blender 2.5; Flags: checkablealone; Types: full
 Name: exporters\luxblend25\pylux; Description: PyLux - LuxRender integration for Blender 2.5 {#MyAppArch}; Types: full
 Name: exporters\luxmax; Description: LuxMax - Exporter for 3ds Max {#MyAppArch} 2010-2012; Types: full
+Name: exporters\luxsi; Description: LuXSI - Exporter for Softimage (x86 only); Types: full
 
 [Tasks]
 Name: desktopicon; Description: {cm:CreateDesktopIcon}; GroupDescription: {cm:AdditionalIcons}; Flags: unchecked
@@ -92,17 +93,20 @@ Name: associatelxs\icons2; Description: {cm:AssociateLXSIcons2}; GroupDescriptio
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: Source\Files\{#MyLuxFileRoot}\*; Excludes: "LuxBlend*.py, PyLux\*"; DestDir: {app}; Flags: ignoreversion; Components: main
 Source: Source\Files\COPYING.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
+Source: Source\Files\README.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
 Source: Source\Files\run_slave.cmd; DestDir: {app}; Flags: ignoreversion; Components: main
-Source: Source\Files\Example Scene\*; DestDir: {#ExampleSceneDir}; Flags: uninsneveruninstall onlyifdoesntexist; Components: examplescene
+Source: Source\Files\Example Scene\*; DestDir: {#ExampleSceneDir}; Flags: recursesubdirs uninsneveruninstall onlyifdoesntexist; Components: examplescene
 
 Source: Source\Files\LuxBlend_0.1.py; DestDir: {code:GetBlenderScriptDir}; Flags: ignoreversion; Components: exporters\luxblend; DestName: LuxBlend_{#MyAppVersion}.py
 
 Source: Source\Files\LuxBlend25\luxrender\*; DestDir: {code:GetBlender25ScriptDir}\addons\luxrender; Flags: ignoreversion recursesubdirs; Components: exporters\luxblend25;
 Source: Source\Files\LuxBlend25\presets\*; DestDir: {code:GetBlender25ScriptDir}\presets; Flags: ignoreversion recursesubdirs; Components: exporters\luxblend25;
-Source: Source\Files\{#MyLuxFileRoot}\PyLux\Python3\pylux.pyd; DestDir: {code:GetBlender25ScriptDir}\addons\luxrender; Flags: ignoreversion; Components: exporters\luxblend25\pylux;
+Source: Source\Files\{#MyLuxFileRoot}\PyLux\Python3\*; DestDir: {code:GetBlender25ScriptDir}\addons\luxrender; Flags: ignoreversion; Components: exporters\luxblend25\pylux;
 
 Source: Source\Files\LuxMax\Scripts\*; DestDir: {code:GetMaxRootDir}\Scripts; Flags: ignoreversion recursesubdirs; Components: exporters\luxmax;
 Source: Source\Files\LuxMax\Plugins\*; DestDir: {code:GetMaxRootDir}\Plugins; Flags: ignoreversion recursesubdirs; Components: exporters\luxmax;
+
+Source: Source\Files\LuXSI\*; DestDir: {code:GetXSIAddonsDir}\LuXSI; Flags: ignoreversion recursesubdirs; Components: exporters\luxsi;
 
 Source: Source\Files\Icons\Scheme1\*; DestDir: {app}\Icons\Scheme1; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
 Source: Source\Files\Icons\Scheme2\*; DestDir: {app}\Icons\Scheme2; Flags: ignoreversion; Components: ; Tasks: associatelxs; Languages: 
@@ -114,7 +118,8 @@ Name: {group}\{#MyAppName}; Filename: {app}\{#MyAppExeName}
 Name: {group}\{cm:WebsiteName}; Filename: {#MyAppURL}; Flags: excludefromshowinnewinstall; 
 Name: {group}\{cm:StartLuxRenderSlave}; Filename: {app}\run_slave.cmd; IconFilename: {app}\luxconsole.exe; Flags: excludefromshowinnewinstall;
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; Flags: excludefromshowinnewinstall;
-Name: {group}\{cm:ExampleScene}; Filename: {commondocs}\LuxRender\Example Scene; Comment: Folder containg the example scene; Flags: foldershortcut excludefromshowinnewinstall; Components: examplescene;
+Name: {group}\{cm:ExampleScene}; Filename: {commondocs}\LuxRender\Example Scene; Comment: Folder containg the example scenes; Flags: foldershortcut excludefromshowinnewinstall; Components: examplescene;
+Name: {group}\{cm:ReadmeFile}; Filename: {app}\README.txt; Flags: excludefromshowinnewinstall;
 
 [InstallDelete]
 Name: {app}\LuxRender.url; Type: files
@@ -138,34 +143,34 @@ Root: HKCR; SubKey: LuxRender.SceneFile\Shell; ValueType: string; ValueData: Ope
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell\Open\Command; ValueType: string; ValueData: """{app}\luxrender.exe"" ""%1"""; Flags: uninsdeletevalue; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.SceneFile\Shell\Edit\Command; ValueType: expandsz; ValueData: "%SystemRoot%\system32\NOTEPAD.EXE ""%1"""; Flags: uninsdeletevalue; Tasks: associatelxs
 Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\luxrender.exe,0; Flags: uninsdeletevalue; Tasks: associatelxs\noicons
-;Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXS blue aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-;Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXS blue aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
-Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big S lxs green aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big S lxs green aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\LuxRender snow lxs.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\LuxRender stealth lxs.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big S lxs green aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.SceneFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big S lxs green aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKCR; SubKey: .lxm; ValueType: string; ValueData: LuxRender.MaterialFile; Flags: uninsdeletekey; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.MaterialFile; ValueType: string; ValueData: LuxRender Material Definition File; Flags: uninsdeletekey; Tasks: associatelxs
-;Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXM gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-;Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXM gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
-Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big M lxm blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big M lxm blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\LuxRender snow lbm ball.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\LuxRender stealth lbm ball.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big M lxm blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.MaterialFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big M lxm blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKCR; SubKey: .lxo; ValueType: string; ValueData: LuxRender.GeometryFile; Flags: uninsdeletekey; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.GeometryFile; ValueType: string; ValueData: LuxRender Geometry File; Flags: uninsdeletekey; Tasks: associatelxs
-;Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXO gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-;Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXO gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
-Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big O lxo blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big O lxo blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\LuxRender snow lxo mercury moon.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\LuxRender stealth lxo mercury moon.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big O lxo blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.GeometryFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big O lxo blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKCR; SubKey: .lxv; ValueType: string; ValueData: LuxRender.VolumeFile; Flags: uninsdeletekey; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.VolumeFile; ValueType: string; ValueData: LuxRender Scene Volume Definition File; Flags: uninsdeletekey; Tasks: associatelxs
-;Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender LXV gray blender aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-;Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender LXV gray blender stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
-Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big V lxv blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big V lxv blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\LuxRender snow lxv smoke.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\LuxRender stealth lxv smoke.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big V lxv blender aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.VolumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big V lxv blender aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKCR; SubKey: .flm; ValueType: string; ValueData: LuxRender.ResumeFile; Flags: uninsdeletekey; Tasks: associatelxs
 Root: HKCR; SubKey: LuxRender.ResumeFile; ValueType: string; ValueData: LuxRender Resume FLM File; Flags: uninsdeletekey; Tasks: associatelxs
-;Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\luxrender FLM green aura.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-;Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\luxrender FLM green aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
-Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big M flm blue aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
-Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big M flm blue aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme1\LuxRender snow flm lens.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme2\LuxRender stealth flm lens.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
+;Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme3\big M flm blue aura snow.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons1
+;Root: HKCR; Subkey: LuxRender.ResumeFile\DefaultIcon; ValueType: string; ValueData: {app}\Icons\Scheme4\big M flm blue aura stealth.ico; Flags: uninsdeletevalue; Tasks: associatelxs\icons2
 Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: string; ValueName: {#RegValInstallDir}; ValueData: {app}; Flags: uninsdeletekeyifempty uninsdeletevalue
 Root: HKLM; Subkey: {#MyAppRegRoot}; ValueType: dword; ValueName: {#RegValFirewallException}; ValueData: 1; Tasks: firewallexception; Flags: uninsdeletekeyifempty uninsdeletevalue; Components: 
 
@@ -193,6 +198,12 @@ MaxRootDirSubCaption=In order to function, LuxMax needs to be installed in the 3
 VerifyMaxLocation=Are you sure you want to install LuxMax into the following directory?%n%n"%1"%n%nIt seems that the directory is not a proper 3ds Max root directory.%n
 MaxLocation=LuxMax location:
 
+XSIAddonsDirCaption=Select LuXSI installation directory
+XSIAddonsDirDesc=Where should LuXSI be installed?
+XSIAddonsDirSubCaption=In order to function, LuXSI needs to be installed in the Softimage addons directory.%n%nVerify or select the Softimage addon directory in which Setup should install LuXSI, then click Next.
+VerifyXSIAddonsLocation=Are you sure you want to install LuXSI into the following directory?%n%n"%1"%n%nIt seems that the directory is not a proper Softimage addons directory.%n
+XSIAddonsLocation=LuXSI location:
+
 DefaultInstallation=Default installation
 AdditionalTasks=Additional options:
 AddToPath=Add install directory to system PATH. This makes it easier to use luxconsole and luxmerger.
@@ -206,6 +217,7 @@ ExampleLocation=Example scene location:
 StartLuxRenderSlave=Start LuxRender Slave
 AddFirewallException=Add Firewall exception for LuxRender slave
 LuxConsole={#MyAppName} Slave
+ReadmeFile=Readme file
 
 [Code]
 var
@@ -213,6 +225,7 @@ var
 	Blender25ScriptDirPage: TInputDirWizardPage;
 	PythonInfoPage: TOutputMsgMemoWizardPage;
 	MaxRootDirPage: TInputDirWizardPage;
+	XSIAddonsDirPage: TInputDirWizardPage;
 
 function NotAlreadyInPath: boolean;
 var
@@ -345,7 +358,7 @@ begin
 		sl.Add(AddBackslash(ExpandConstant('{commondocs}')) + '.blender\' + ver + '\scripts');
 		for i:= 0 to sl.Count-1 do
 		begin
-      if DirExists(sl[i]) then
+      if DirExists(RemoveBackslashUnlessRoot(sl[i])) then
       begin
         result:= sl[i];
         break;
@@ -426,6 +439,30 @@ begin
 	end;
 end;
 
+function FindXSIAddonsDir: string;
+var
+	regRoot: array[0..15] of integer;
+	i, VerI, rootCount: integer;
+	sl: TStringList;
+begin
+	result:= '';
+
+	sl:= TStringList.Create;
+	try
+		sl.Add(AddBackslash(GetEnv('XSI_USERHOME')) + '\Addons');
+		for i:= 0 to sl.Count-1 do
+		begin
+      if DirExists(RemoveBackslashUnlessRoot(sl[i])) then
+      begin
+        result:= sl[i];
+        break;
+      end;
+    end;
+	finally
+		sl.free;
+	end;
+end;
+
 function SanityCheckBlenderScriptDir(ScriptDir: string): boolean;
 var
 	FindRec: TFindRec;
@@ -471,8 +508,41 @@ begin
 	result:= True;
 end;
 
+function SanityCheckXSIAddonsDir(ScriptDir: string): boolean;
+begin
+	result:= False;
+	if not DirExists(RemoveBackslashUnlessRoot(ScriptDir)) then
+		exit;
+	if CompareText(ExtractFileName(RemoveBackslashUnlessRoot(ScriptDir)), 'Addons') <> 0 then
+		exit;
+	result:= True;
+end;
+
 procedure InitializeWizard;
 begin
+	XSIAddonsDirPage := CreateInputDirPage(wpSelectComponents,
+		CustomMessage('XSIAddonsDirCaption'), CustomMessage('XSIAddonsDirDesc'),
+		CustomMessage('XSIAddonsDirSubCaption'),
+		False, '');
+	XSIAddonsDirPage.Add('');
+  XSIAddonsDirPage.Values[0] := GetPreviousData('XSIAddonsDir', ''); 	
+
+
+	MaxRootDirPage := CreateInputDirPage(wpSelectComponents,
+		CustomMessage('MaxRootDirCaption'), CustomMessage('MaxRootDirDesc'),
+		CustomMessage('MaxRootDirSubCaption'),
+		False, '');
+	MaxRootDirPage.Add('');
+	MaxRootDirPage.Values[0] := GetPreviousData('MaxRootDir', '');
+	
+	 	
+	Blender25ScriptDirPage := CreateInputDirPage(wpSelectComponents,
+		CustomMessage('Blender25ScriptDirCaption'), CustomMessage('Blender25ScriptDirDesc'),
+		CustomMessage('Blender25ScriptDirSubCaption'),
+		False, '');
+	Blender25ScriptDirPage.Add('');
+	Blender25ScriptDirPage.Values[0] := GetPreviousData('Blender25ScriptDir', '');
+	
 
 	BlenderScriptDirPage := CreateInputDirPage(wpSelectComponents,
 		CustomMessage('BlenderScriptDirCaption'), CustomMessage('BlenderScriptDirDesc'),
@@ -485,23 +555,7 @@ begin
 		CustomMessage('BlenderPythonSubCaption'),
 		'{\rtf1\ansi ' + CustomMessage('BlenderPythonMsg') + ' }');
 
-	BlenderScriptDirPage.Values[0] := GetPreviousData('BlenderScriptDir', '');
-	
-	
-	Blender25ScriptDirPage := CreateInputDirPage(wpSelectComponents,
-		CustomMessage('Blender25ScriptDirCaption'), CustomMessage('Blender25ScriptDirDesc'),
-		CustomMessage('Blender25ScriptDirSubCaption'),
-		False, '');
-	Blender25ScriptDirPage.Add('');
-	Blender25ScriptDirPage.Values[0] := GetPreviousData('Blender25ScriptDir', '');
-	
-	
-	MaxRootDirPage := CreateInputDirPage(wpSelectComponents,
-		CustomMessage('MaxRootDirCaption'), CustomMessage('MaxRootDirDesc'),
-		CustomMessage('MaxRootDirSubCaption'),
-		False, '');
-	MaxRootDirPage.Add('');
-	MaxRootDirPage.Values[0] := GetPreviousData('MaxRootDir', ''); 	
+	BlenderScriptDirPage.Values[0] := GetPreviousData('BlenderScriptDir', '');		
 end;
 
 
@@ -526,6 +580,10 @@ begin
 	begin
 		result:= not IsComponentSelected('exporters\luxmax');
 	end;
+	if (PageID = XSIAddonsDirPage.ID) then
+	begin
+		result:= not IsComponentSelected('exporters\luxsi');
+	end;	
 end;
 
 procedure RegisterPreviousData(PreviousDataKey: Integer);
@@ -534,6 +592,7 @@ begin
 	SetPreviousData(PreviousDataKey, 'BlenderScriptDir', BlenderScriptDirPage.Values[0]);
 	SetPreviousData(PreviousDataKey, 'Blender25ScriptDir', Blender25ScriptDirPage.Values[0]);
 	SetPreviousData(PreviousDataKey, 'MaxRootDir', MaxRootDirPage.Values[0]);
+	SetPreviousData(PreviousDataKey, 'XSIAddonsDir', XSIAddonsDirPage.Values[0]);	
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
@@ -557,6 +616,11 @@ begin
   	begin
   		MaxRootDirPage.Values[0]:= FindMaxRootDir;
   	end;
+
+  	if (XSIAddonsDirPage.Values[0] = '') then
+  	begin
+  		XSIAddonsDirPage.Values[0]:= FindXSIAddonsDir;
+  	end;  	
   end;
 
 	if CurPageID = BlenderScriptDirPage.ID then
@@ -589,6 +653,16 @@ begin
 				exit;
 		end;
 	end;
+	if CurPageID = XSIAddonsDirPage.ID then
+	begin
+		if not SanityCheckXSIAddonsDir(AddBackslash(XSIAddonsDirPage.Values[0])) then
+		begin
+			// if sanity check fails, ask user to verify directory
+			if MsgBox(FmtMessage(CustomMessage('VerifyXSIAddonsLocation'), [XSIAddonsDirPage.Values[0]]),
+					mbConfirmation, MB_YESNO or MB_DEFBUTTON2) = IDNO then
+				exit;
+		end;
+	end;	
 	Result := True;
 end;
 
@@ -622,6 +696,13 @@ begin
 		S:= S + NewLine;
 	end;
 
+	if (not ShouldSkipPage(XSIAddonsDirPage.ID)) then
+	begin
+		S:= S + CustomMessage('XSIAddonsLocation') + NewLine;
+		S:= S + Space + XSIAddonsDirPage.Values[0] + NewLine;
+		S:= S + NewLine;
+	end;
+
 	if IsComponentSelected('examplescene') then
 	begin
 		S:= S + CustomMessage('ExampleLocation') + NewLine;
@@ -634,20 +715,22 @@ end;
 
 function GetBlenderScriptDir(Param: String): String;
 begin
-	{ Return the selected BlenderScriptDir }
 	Result := BlenderScriptDirPage.Values[0];
 end;
 
 function GetBlender25ScriptDir(Param: String): String;
 begin
-	{ Return the selected BlenderScriptDir }
 	Result := Blender25ScriptDirPage.Values[0];
 end;
 
 function GetMaxRootDir(Param: String): String;
 begin
-	{ Return the selected MaxRootDir }
 	Result := MaxRootDirPage.Values[0];
+end;
+
+function GetXSIAddonsDir(Param: String): String;
+begin
+	Result := XSIAddonsDirPage.Values[0];
 end;
 
 function LuxRunParameters(Param: string): string;
