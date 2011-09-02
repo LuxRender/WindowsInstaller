@@ -120,6 +120,7 @@ Name: {group}\{cm:StartLuxRenderSlave}; Filename: {app}\run_slave.cmd; IconFilen
 Name: {commondesktop}\{#MyAppName}; Filename: {app}\{#MyAppExeName}; Tasks: desktopicon; Flags: excludefromshowinnewinstall;
 Name: {group}\{cm:ExampleScene}; Filename: {commondocs}\LuxRender\Example Scene; Comment: Folder containg the example scenes; Flags: foldershortcut excludefromshowinnewinstall; Components: examplescene;
 Name: {group}\{cm:ReadmeFile}; Filename: {app}\README.txt; Flags: excludefromshowinnewinstall;
+Name: {group}\{cm:LuxMaxDocumentation}; Filename: http://www.luxrender.net/forum/viewtopic.php?f=33&t=6258; Comment: {cm:LuxMaxDocumentation} (web); Flags: excludefromshowinnewinstall; Components: exporters\luxmax;
 
 [InstallDelete]
 Name: {app}\LuxRender.url; Type: files
@@ -197,6 +198,7 @@ MaxRootDirDesc=Where should LuxMax be installed?
 MaxRootDirSubCaption=In order to function, LuxMax needs to be installed in the 3ds Max scripts and plugin directories.%n%nVerify or select the 3ds Max root directory in which Setup should install LuxMax, then click Next.
 VerifyMaxLocation=Are you sure you want to install LuxMax into the following directory?%n%n"%1"%n%nIt seems that the directory is not a proper 3ds Max root directory.%n
 MaxLocation=LuxMax location:
+LuxMaxDocumentation=LuxMax Documentation
 
 XSIAddonsDirCaption=Select LuXSI installation directory
 XSIAddonsDirDesc=Where should LuXSI be installed?
