@@ -8,8 +8,8 @@
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
 ;#define MyAppArch "x86 SSE1"
-#define MyAppArch "x86 SSE2"
-;#define MyAppArch "x64"
+;#define MyAppArch "x86 SSE2"
+#define MyAppArch "x64"
 ;#define MyAppCLArch "OpenCL"
 #define MyAppCLArch "NoOpenCL"
 
@@ -187,10 +187,10 @@ BlenderPythonMsg={\colortbl ;\red255\green0\blue0;}Setup could not locate Python
 VerifyLuxBlendLocation=Are you sure you want to install LuxBlend into the following directory?%n%n"%1"%n%nIt seems that the directory is not a regular Blender 2.49 script directory.%n
 LuxBlendLocation=LuxBlend location:
 
-Blender25ScriptDirCaption=Select Blender 2.5 script directory
+Blender25ScriptDirCaption=Select Blender 2.5x script directory
 Blender25ScriptDirDesc=Where should LuxBlend25 be installed?
-Blender25ScriptDirSubCaption=In order to function, LuxBlend25 needs to be installed in the Blender 2.5 scripts directory.%n%nVerify or select the Blender 2.5 script directory in which Setup should install LuxBlend25, then click Next.
-VerifyLuxBlend25Location=Are you sure you want to install LuxBlend25 into the following directory?%n%n"%1"%n%nIt seems that the directory is not a regular Blender 2.5 script directory.%n
+Blender25ScriptDirSubCaption=In order to function, LuxBlend25 needs to be installed in the Blender 2.5x scripts directory.%n%nVerify or select the Blender 2.5x script directory in which Setup should install LuxBlend25, then click Next.%n%nNote: do not select the "addons" directory, but the parent of the "addons" directory.
+VerifyLuxBlend25Location=Are you sure you want to install LuxBlend25 into the following directory?%n%n"%1"%n%nIt seems that the directory is not a regular Blender 2.5x script directory.
 LuxBlend25Location=LuxBlend25 location:
 
 MaxRootDirCaption=Select LuxMax installation directory
@@ -356,8 +356,6 @@ begin
 	sl:= TStringList.Create;
 	try
 		sl.Add(AddBackslash(GetEnv('HOME')) + ver + '\scripts');
-		sl.Add(AddBackslash(ExpandConstant('{userdocs}')) + '.blender\' + ver + '\scripts');
-		sl.Add(AddBackslash(ExpandConstant('{commondocs}')) + '.blender\' + ver + '\scripts');
 		for i:= 0 to sl.Count-1 do
 		begin
       if DirExists(RemoveBackslashUnlessRoot(sl[i])) then
@@ -369,6 +367,9 @@ begin
 	finally
 		sl.free;
 	end;
+
+  // if all else fails, this is the most proper location	
+	result:= AddBackslash(ExpandConstant('{userappdata}')) + 'Blender Foundation\Blender\' + ver + '\scripts';
 end;
 
 function LocatePython: boolean;
@@ -467,7 +468,7 @@ end;
 
 function SanityCheckBlenderScriptDir(ScriptDir: string): boolean;
 var
-	FindRec: TFindRec;
+  FindRec: TFindRec;
 begin
 	result:= False;
 	if not DirExists(RemoveBackslashUnlessRoot(ScriptDir)) then
@@ -481,10 +482,12 @@ begin
 end;
 
 function SanityCheckBlender25ScriptDir(ScriptDir: string): boolean;
-var
-	FindRec: TFindRec;
 begin
 	result:= False;
+	// can't assume much more than this
+	if CompareText(ExtractFileName(RemoveBackslashUnlessRoot(ScriptDir)), 'scripts') <> 0 then
+	  exit; 
+{		
 	if not DirExists(RemoveBackslashUnlessRoot(ScriptDir)) then
 		exit;
 	if not DirExists(ScriptDir + 'addons') then
@@ -493,6 +496,7 @@ begin
 		exit;
 	if not DirExists(ScriptDir + 'presets') then
 		exit;
+}
 	result:= True;
 end;
 
