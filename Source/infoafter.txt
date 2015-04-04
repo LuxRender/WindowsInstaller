@@ -1,0 +1,14 @@
+Thank you for using LuxRender
+
+For community support please visit our forums at http://www.luxrender.net/forum
+
+For documentation please see the wiki at http://www.luxrender.net/wiki
+
+Our bugtracker is at http://www.luxrender.net/mantis
+
+
+The LuxEngine image is courtesy of coplander
+
+We hope you enjoy using LuxRender
+
+  LuxRender team
