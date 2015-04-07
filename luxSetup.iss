@@ -2,15 +2,15 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LuxRender"
-#define MyAppVersion "1.4"
-#define MyAppVerName "LuxRender 1.4"
+#define MyAppVersion "1.5"
+#define MyAppVerName "LuxRender 1.5"
 #define MyAppPublisher "LuxRender"
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
 ;#define MyAppArch "x86"
 #define MyAppArch "x64"
-;#define MyAppCLArch "OpenCL"
-#define MyAppCLArch "NoOpenCL"
+#define MyAppCLArch "OpenCL"
+;#define MyAppCLArch "NoOpenCL"
 
 #define PackageLuxBlend25
 ;#define PackageLuxMax
