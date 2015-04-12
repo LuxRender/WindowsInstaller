@@ -19,7 +19,8 @@
 #define MyAppBitness StringChange(StringChange(MyAppArch, "x86", "32"), "x64", "64")
 #define MyAppBitnessStr StringChange(StringChange(MyAppArch, "x86", "32bit"), "x64", "64bit")
 #define MyLuxFileRoot StringChange("LuxRender " + MyAppBitness + " " + MyAppCLArch, " ", "_")  
-#define LuxBlend26File StringChange("LuxBlend27 " + MyAppVersion + " " + MyAppBitnessStr + " " + MyAppCLArch + ".zip", " ", "_")
+;#define LuxBlend26File StringChange("LuxBlend27 " + MyAppVersion + " " + MyAppBitnessStr + " " + MyAppCLArch + ".zip", " ", "_")
+#define LuxBlend26File "LuxBlend.zip"
 #define LuxBlend26Readme "LuxBlend27_README.rtf"  
 #define VCRedistFile "vcredist_" + MyAppArch + ".exe"
 #pragma message "Lux file root: '" + MyLuxFileRoot + "'"
