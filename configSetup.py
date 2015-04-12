@@ -1,3 +1,13 @@
+#! This script updates the Injnos setup script to change the architecture and support for
+#! OpenCl. It is meant to be used as part of the automatic build system to build all the
+#! different variants of LuxRender that are supported:
+#!   - 64-bit with OpenCL
+#!   - 64-bit without OpenCL
+#!   - 32-bit with OpenCL
+#!   - 32-bit without OpenCL
+#! Usage example:
+#!   python configSetup.py --platform x64 --ocl luxSetup.iss
+#!
 import re, argparse
 
 argParser = argparse.ArgumentParser()
@@ -14,7 +24,7 @@ oclArch = "NoOpenCL"
 if args.ocl:
 	oclArch = "OpenCL"
 
-#! Open the header file and read the content
+#! Open the script file and read the content
 try:
   setupScript = open(args.infile,"r")
   source = setupScript.read()
@@ -33,11 +43,11 @@ if isOK:
   newScript = platRE.sub(newPlat, source)
   newScript = oclRE.sub(newOCL, newScript)
 
-  #! Save the header file with the change
+  #! Save the script file with the change
   try:
     setupScript = open(args.infile,"w")
     setupScript.write(newScript)
     setupScript.close()
   except:
-    print("Error: could not write the header file %s" % args.infile)
+    print("Error: could not write the script file %s" % args.infile)
 
