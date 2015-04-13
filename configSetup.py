@@ -35,6 +35,7 @@ except:
   isOK = False
 
 if isOK:
+  print("Configuring the Setup script for platform %s - %s" % (args.platform,oclArch))
   platRE = re.compile(r"^\s*#define\s+MyAppArch\s+.+$", re.MULTILINE)
   oclRE = re.compile(r"^\s*#define\s+MyAppCLArch\s+.+$", re.MULTILINE)
 
