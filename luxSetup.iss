@@ -107,7 +107,7 @@ Name: associatelxs\icons2; Description: {cm:AssociateLXSIcons2}; GroupDescriptio
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: Source\Files\{#VCRedistFile}; DestDir: {tmp}; Flags: deleteafterinstall ignoreversion
-Source: Source\Files\{#MyLuxFileRoot}\*; Excludes: "LuxBlend*.py, PyLux\*;luxrender\*"; DestDir: {app}; Flags: recursesubdirs ignoreversion; Components: main
+Source: Source\Files\{#MyLuxFileRoot}\*; Excludes: "LuxBlend*.py, PyLux\*, luxrender\*"; DestDir: {app}; Flags: recursesubdirs ignoreversion; Components: main
 Source: Source\Files\COPYING.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
 Source: Source\Files\README.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
 Source: Source\Files\run_slave.cmd; DestDir: {app}; Flags: ignoreversion; Components: main
