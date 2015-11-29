@@ -1,2 +1,5 @@
 Output/*
 Source/Files/LuxRender_*
+syntax: glob
+pylux.pyd
+pyluxcore.pyd

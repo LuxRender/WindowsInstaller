@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LuxRender"
-#define MyAppVersion "1.5"
-#define MyAppVerName "LuxRender 1.5"
+#define MyAppVersion "1.6"
+#define MyAppVerName "LuxRender 1.6"
 #define MyAppPublisher "LuxRender"
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
@@ -107,7 +107,7 @@ Name: associatelxs\icons2; Description: {cm:AssociateLXSIcons2}; GroupDescriptio
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: Source\Files\{#VCRedistFile}; DestDir: {tmp}; Flags: deleteafterinstall ignoreversion
-Source: Source\Files\{#MyLuxFileRoot}\*; Excludes: "LuxBlend*.py, PyLux\*, luxrender\*"; DestDir: {app}; Flags: recursesubdirs ignoreversion; Components: main
+Source: Source\Files\{#MyLuxFileRoot}\*; Excludes: "LuxBlend*.py, PyLux\*, luxrender\*, .hgkeepifempty"; DestDir: {app}; Flags: recursesubdirs ignoreversion; Components: main
 Source: Source\Files\COPYING.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
 Source: Source\Files\README.txt; DestDir: {app}; Flags: ignoreversion; Components: ; Tasks: ; Languages: 
 Source: Source\Files\run_slave.cmd; DestDir: {app}; Flags: ignoreversion; Components: main
