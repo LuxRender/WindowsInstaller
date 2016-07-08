@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "LuxRender"
-#define MyAppVersion "1.6"
-#define MyAppVerName "LuxRender 1.6"
+#define MyAppVersion "1.7"
+#define MyAppVerName "LuxRender 1.7"
 #define MyAppPublisher "LuxRender"
 #define MyAppURL "http://www.luxrender.net"
 #define MyAppExeName "luxrender.exe"
